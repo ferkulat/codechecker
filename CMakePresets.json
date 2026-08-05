@@ -1,0 +1,48 @@
+{
+  "version": 12,
+  "cmakeMinimumRequired": {
+    "major": 4,
+    "minor": 4,
+    "patch": 0
+  },
+  "configurePresets": [
+     {
+      "name": "default",
+      "hidden": true,
+      "displayName": "Default Config Base",
+      "description": "Default Config used as base for other presets",
+      "environment": {
+        "REPO_ROOT": "${sourceDir}"
+      }
+
+    },
+    {
+      "name": "windows",
+      "hidden": true,
+      "inherits": "default",
+      "displayName": "Default Config for windows",
+      "description": "Default Config used as base for other presets on windows",
+      "generator": "Ninja"
+    },
+    {
+      "name": "windows_dev_env",
+      "hidden": false,
+      "binaryDir": "${sourceDir}/build",
+      "inherits": "windows",
+      "displayName": "Development Config for windows",
+      "description": "Development Config for windows",
+      "cacheVariables": {
+        "CC_pythonVersion": "3.9",
+        "venv_dir": "${sourceDir}/build/venv_dev",
+        "ACTIVATE_VENV": "${sourceDir}/build/venv_dev/Scripts/activate.bat"
+      }
+    }
+
+  ],
+  "buildPresets": [
+    {
+      "name": "windows_dev_env",
+      "configurePreset": "windows_dev_env"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+add_subdirectory(merge_clang_extdef_mappings)
+add_subdirectory(statistics_collector)
