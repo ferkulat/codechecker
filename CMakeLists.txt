@@ -15,6 +15,7 @@ if (NOT EXISTS ${venv_dir})
     )
 endif()
 set(PYTHON_BIN ${venv_dir}/Scripts/python${CMAKE_EXECUTABLE_SUFFIX})
+set(BUILD_DIR ${CMAKE_BINARY_DIR})
 add_subdirectory(tools)
 add_subdirectory(analyzer)
 
