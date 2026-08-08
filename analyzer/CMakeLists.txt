@@ -10,7 +10,7 @@ execute_process(
 if(NOT BUILD_DIR)
   set(BUILD_DIR ${CMAKE_CURRENT_LIST_DIR}/build)
 endif()
-
+set(CURRENT_DIR      ${CMAKE_CURRENT_LIST_DIR})
 set(CC_BUILD_DIR     ${BUILD_DIR}/CodeChecker)
 set(CC_BUILD_BIN_DIR ${CC_BUILD_DIR}/bin)
 set(CC_BUILD_LIB_DIR ${CC_BUILD_DIR}/lib/python3)
@@ -66,6 +66,7 @@ add_custom_target(package_report_converter
     WORKING_DIRECTORY ${CC_BUILD_BIN_DIR}
     DEPENDS build_report_converter analyzer_package_dir_structure
 )
+
 add_custom_target(package_merge_clang_extdef_mappings
     # Copy files.
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/tools/merge_clang_extdef_mappings/build/merge_clang_extdef_mappings/codechecker_merge_clang_extdef_mappings ${CC_BUILD_LIB_DIR}/codechecker_merge_clang_extdef_mappings
@@ -76,5 +77,18 @@ add_custom_target(package_merge_clang_extdef_mappings
 )
 
 add_custom_target(package_analyzer
+	# Copy libraries.
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${ROOT}/codechecker_common ${CC_BUILD_LIB_DIR}/codechecker_common
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURRENT_DIR}/codechecker_analyzer ${CC_BUILD_LIB_DIR}/codechecker_analyzer
+	# Copy config files and extend 'version.json' file with git information.
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${ROOT}/config ${CC_BUILD_DIR}/config
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CURRENT_DIR}/config ${CC_BUILD_DIR}/config
+	COMMAND ${PYTHON_BIN}     ${ROOT}/scripts/build/extend_version_file.py -r ${ROOT} ${CC_BUILD_DIR}/config/analyzer_version.json
+	# Copy CodeChecker binary.
+	COMMAND ${CMAKE_COMMAND} -E copy ${ROOT}/bin/CodeChecker ${CC_BUILD_BIN_DIR}/CodeChecker
+
+	# Copy license file.
+	COMMAND ${CMAKE_COMMAND} -E copy ${ROOT}/LICENSE.TXT ${CC_BUILD_DIR}/LICENSE.TXT
+
     DEPENDS analyzer_package_dir_structure package_tu_collector package_merge_clang_extdef_mappings package_report_converter package_statistics_collector package_bazel_compile_commands
 )

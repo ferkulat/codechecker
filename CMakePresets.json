@@ -33,8 +33,8 @@
       "description": "Development Config for windows",
       "cacheVariables": {
         "CC_pythonVersion": "3.9",
-        "venv_dir": "${sourceDir}/build/venv_dev",
-        "ACTIVATE_VENV": "${sourceDir}/build/venv_dev/Scripts/activate.bat"
+        "venv_dir": "${sourceDir}/venv_dev",
+        "ACTIVATE_VENV": "${sourceDir}/venv_dev/Scripts/activate.bat"
       }
     }
 
